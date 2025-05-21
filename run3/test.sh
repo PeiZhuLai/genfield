@@ -21,6 +21,6 @@ for ((iBin=0; iBin<$nMass; iBin++))
         do
         fraction=${fractions[$jBin]}
 
-        hep_sub 3_private_product_condor.sh -wt mid -g cms -mem 4000 -o ./job_out/job${step}_${fraction}_M${mass}.out -e ./job_out/job${step}_${fraction}_M${mass}.err -argu ${step} ${mass} ${fraction} ${NEvents}
+        sh test_private_product.sh -argu ${step} ${mass} ${fraction} ${NEvents}
     done
 done

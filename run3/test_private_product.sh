@@ -1,15 +1,11 @@
 #!/bin/bash
-# cmssw-el8 bash << 'EOF'
-# requirements = TARGET.OpSysAndVer =?= "AlmaLinux9"                                                                                                                                           
-# MY.WantOS = "el8"
-
 /bin/hostname
 gcc -v
 pwd
 export PATH=/cvmfs/common.ihep.ac.cn/software/hepjob/bin:$PATH
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 
-cmssw-el8
+#cmssw-el8
 
 export X509_USER_PROXY=/publicfs/cms/user/laipeizhu/ALP/private_sample/genfield/x509up_u23187
 #cp /afs/cern.ch/work/z/zewang/private/ALP/gen/private_product/x509up_u117617 /tmp/x509up_u117617
@@ -180,5 +176,3 @@ then
     cmsRun HIG-Run3Summer22EENanoAODv12-00005_1_cfg_${fraction}.py
 
 fi
-
-# EOF
