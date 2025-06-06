@@ -1,14 +1,17 @@
 #!/bin/bash
-# /bin/hostname
-# gcc -v
+# cmssw-el8 bash << 'EOF'
+# requirements = TARGET.OpSysAndVer =?= "AlmaLinux9"                                                                                                                                           
+# MY.WantOS = "el8"
+
+/bin/hostname
+gcc -v
 pwd
 # export PATH=/cvmfs/common.ihep.ac.cn/software/hepjob/bin:$PATH
 source /cvmfs/cms.cern.ch/cmsset_default.sh
+d
+# cmssw-el8
 
-#cmssw-el8
-
-export X509_USER_PROXY=/afs/cern.ch/user/p/pelai/x509up
-#cp /afs/cern.ch/work/z/zewang/private/ALP/gen/private_product/x509up_u117617 /tmp/x509up_u117617
+export X509_USER_PROXY=/tmp/x509up_u175325
 
 step=$1
 mass=$2
@@ -21,9 +24,8 @@ then
     # Step 1: LHE->GEN-SIM
     cd /afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/run3/CMSSW_12_4_14_patch3/src/
     cmsenv
-    #scram b
     cd HZaTo2l2g_M${mass}/fraction${fraction}
-    # export X509_USER_PROXY=/afs/cern.ch/user/p/pelai/x509up
+    export X509_USER_PROXY=/tmp/x509up_u175325
     
     # cmsDriver.py Configuration/GenProduction/python/HIG-Run3Summer22wmLHEGS-00026-fragment_M${mass}.py \
     #     --python_filename HIG-Run3Summer22wmLHEGS-00026_1_fragment_cfg_${fraction}.py \
@@ -48,9 +50,8 @@ then
     # Step 2: DIGI → L1 → DIGI2RAW → HLT
     cd /afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/run3/CMSSW_12_4_14_patch3/src/
     cmsenv
-    #scram b
     cd HZaTo2l2g_M${mass}/fraction${fraction}
-    # export X509_USER_PROXY=/afs/cern.ch/user/p/pelai/x509up
+    export X509_USER_PROXY=/tmp/x509up_u175325
     
     #export X509_USER_PROXY=/publicfs/cms/user/wangzebing/ALP/genproduct/x509up_u12163
     #cp /publicfs/cms/user/wangzebing/ALP/genproduct/x509up_u12163 /tmp
@@ -84,37 +85,35 @@ then
     # AOD
     cd /afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/run3/CMSSW_12_4_14_patch3/src/
     cmsenv
-
-    export X509_USER_PROXY=/afs/cern.ch/user/p/pelai/x509up
-    #scram b
     cd HZaTo2l2g_M${mass}/fraction${fraction}
+    export X509_USER_PROXY=/tmp/x509up_u175325
 
-    # cmsDriver.py \
-    # --python_filename HIG-Run3Summer22DRPremix-00013_2_cfg_FRACTIONS.py \
-    # --eventcontent RAWSIM \
-    # --customise Configuration/DataProcessing/Utils.addMonitoring \
-    # --datatier GEN-SIM-RAW \
-    # --fileout file:$outpath/HZaTo2l2g_M${mass}-Run3Summer22DRPremix-00013_1_FRACTIONS.root \
-    # --conditions 124X_mcRun3_2022_realistic_v12 \
-    # --customise_commands process.source.bypassVersionCheck = cms.untracked.bool(True)  \
-    # --step HLT:2022v12 \
-    # --geometry DB:Extended \
-    # --filein file:$outpath/HZaTo2l2g_M${mass}-Run3Summer22DRPremix-00013_0_FRACTIONS.root \
-    # --era Run3 \
-    # --no_exec \
-    # --mc \
-    # -n ${NEvents}
+    # cmsDriver.py  \
+    #     --python_filename HIG-Run3Summer22DRPremix-00013_2_cfg_FRACTIONS.py \
+    #     --eventcontent AODSIM \
+    #     --customise Configuration/DataProcessing/Utils.addMonitoring \
+    #     --datatier AODSIM --fileout file:$outpath/HZaTo2l2g_M${mass}-Run3Summer22DRPremix-00013_FRACTIONS.root \
+    #     --conditions 124X_mcRun3_2022_realistic_postEE_v1 \
+    #     --step RAW2DIGI,L1Reco,RECO,RECOSIM \
+    #     --procModifiers siPixelQualityRawToDigi \
+    #     --geometry DB:Extended \
+    #     --filein file:$outpath/HZaTo2l2g_M${mass}-Run3Summer22DRPremix-00013_0_FRACTIONS.root \
+    #     --era Run3 \
+    #     --no_exec \
+    #     --mc \
+    #     -n ${NEvents}
 
     cmsRun HIG-Run3Summer22DRPremix-00013_2_cfg_${fraction}.py
+
+
 
 elif [ $step == 4 ] 
 then
     # MINIAOD
     cd /afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/run3/CMSSW_13_0_13/src/
     cmsenv
-    #scram b
     cd HZaTo2l2g_M${mass}/fraction${fraction}
-    export X509_USER_PROXY=/afs/cern.ch/user/p/pelai/x509up
+    export X509_USER_PROXY=/tmp/x509up_u175325
 
     # cmsDriver.py \
     #     --python_filename HIG-Run3Summer22MiniAODv4-00005_1_cfg_${fraction}.py \
@@ -133,14 +132,14 @@ then
 
     cmsRun HIG-Run3Summer22MiniAODv4-00005_1_cfg_${fraction}.py
 
+
 elif [ $step == 5 ] 
 then
     # MINIAODSIM
     cd /afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/run3/CMSSW_13_0_13/src/
     cmsenv
-
     cd HZaTo2l2g_M${mass}/fraction${fraction}
-    export X509_USER_PROXY=/afs/cern.ch/user/p/pelai/x509up
+    export X509_USER_PROXY=/tmp/x509up_u175325
 
     # cmsDriver.py  \
     #    --python_filename  HIG-Run3Summer22NanoAODv12-00005_1_cfg_${fraction}.py \
@@ -159,4 +158,7 @@ then
 
     cmsRun HIG-Run3Summer22NanoAODv12-00005_1_cfg_${fraction}.py
 
+
 fi
+
+# EOF

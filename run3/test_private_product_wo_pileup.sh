@@ -19,7 +19,7 @@ NEvents=$4
 if [ $step == 1 ] 
 then
     # Step 1: LHE->GEN-SIM
-    cd /afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/run3/CMSSW_12_4_14_patch3/src/
+    cd /afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/run3/CMSSW_12_4_11_patch3/src/
     cmsenv
     #scram b
     cd HZaTo2l2g_M${mass}/fraction${fraction}
@@ -45,8 +45,8 @@ then
 
 elif [ $step == 2 ] 
 then
-    # Step 2: DIGI → L1 → DIGI2RAW → HLT
-    cd /afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/run3/CMSSW_12_4_14_patch3/src/
+    # Step 2: DIGI2RAW-HLT (DR)
+    cd /afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/run3/CMSSW_12_4_11_patch3/src/
     cmsenv
     #scram b
     cd HZaTo2l2g_M${mass}/fraction${fraction}
@@ -81,8 +81,9 @@ then
 
 elif [ $step == 3 ] 
 then
-    # AOD
-    cd /afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/run3/CMSSW_12_4_14_patch3/src/
+    # Adding the HLT objects /information.
+
+    cd /afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/run3/CMSSW_12_4_11_patch3/src/
     cmsenv
 
     export X509_USER_PROXY=/afs/cern.ch/user/p/pelai/x509up
@@ -109,6 +110,34 @@ then
 
 elif [ $step == 4 ] 
 then
+    # Adding the HLT objects /information.
+
+    cd /afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/run3/CMSSW_12_4_11_patch3/src/
+    cmsenv
+
+    export X509_USER_PROXY=/afs/cern.ch/user/p/pelai/x509up
+    #scram b
+    cd HZaTo2l2g_M${mass}/fraction${fraction}
+
+    # cmsDriver.py  \
+    #     --python_filename HIG-Run3Summer22DRPremix-00013_2_cfg_FRACTIONS.py \
+    #     --eventcontent AODSIM \
+    #     --customise Configuration/DataProcessing/Utils.addMonitoring \
+    #     --datatier AODSIM --fileout file:$outpath/HZaTo2l2g_M${mass}-Run3Summer22DRPremix-00013_FRACTIONS.root \
+    #     --conditions 124X_mcRun3_2022_realistic_postEE_v1 \
+    #     --step RAW2DIGI,L1Reco,RECO,RECOSIM \
+    #     --procModifiers siPixelQualityRawToDigi \
+    #     --geometry DB:Extended \
+    #     --filein file:$outpath/HZaTo2l2g_M${mass}-Run3Summer22DRPremix-00013_0_FRACTIONS.root \
+    #     --era Run3 \
+    #     --no_exec \
+    #     --mc \
+    #     -n ${NEvents}
+
+    cmsRun HIG-Run3Summer22DRPremix-00013_3_cfg_${fraction}.py
+
+elif [ $step == 5 ] 
+then
     # MINIAOD
     cd /afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/run3/CMSSW_13_0_13/src/
     cmsenv
@@ -133,7 +162,7 @@ then
 
     cmsRun HIG-Run3Summer22MiniAODv4-00005_1_cfg_${fraction}.py
 
-elif [ $step == 5 ] 
+elif [ $step == 6 ] 
 then
     # MINIAODSIM
     cd /afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/run3/CMSSW_13_0_13/src/
