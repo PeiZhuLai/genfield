@@ -1,0 +1,8 @@
+[INFO] Running from: /afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3
+[INFO] Initial CMSSW_BASE: <undefined>
+[INFO] Setting up CMSSW_12_4_X for mass 0p1 ...
+SCRAM fatal: Unable to locate the top of local release. Please run this command from a SCRAM-based area.
+[DEBUG] After setup_CMSSW_124: pwd=/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3
+[DEBUG] After setup_CMSSW_124: CMSSW_BASE=<undefined>
+[ERROR] CMSSW_BASE is not set after setup_CMSSW_124.
+        請檢查 common_prepareConfig.sh 中 setup_CMSSW_124 是否有在某個 CMSSW_12_4_X 目錄下執行 'cmsenv'。

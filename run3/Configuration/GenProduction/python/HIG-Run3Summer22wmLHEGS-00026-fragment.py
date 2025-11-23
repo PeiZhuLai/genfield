@@ -29,7 +29,6 @@ generator = cms.EDFilter("Pythia8ConcurrentHadronizerFilter",
                 'pythia8PSweightsSettings',
             ),
     ),
-    generateConcurrently = cms.untracked.bool(False),
 )
 
 ProductionFilterSequence = cms.Sequence(generator)

@@ -3,3 +3,10 @@
 */job_out*/*
 */job_sub*/*
 */pelai.cc
+*.err
+*.log
+*.out
+*.sub
+*.pyc
+
+massProduce/*/CMSSW*/*
