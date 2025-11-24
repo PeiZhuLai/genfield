@@ -14,8 +14,15 @@ step      = os.getenv("STEP", "NANOAOD")
 pset_path    = os.getenv("CFG_PATH")
 out_base_dir = os.getenv("OUT_DIR")
 
-if not all([era, mass, fraction, pset_path, out_base_dir]):
-    raise RuntimeError("Missing required environment variables: ERA/MASS/FRACTION/CFG_PATH/OUT_DIR")
+# 新增：miniAOD 的輸入 dataset（由 miniAOD CRAB 產生、已 publication 的 USER dataset）
+# SIM --> DIGI --> AOD --> miniAOD --> nanoAOD (本檔)
+miniaod_dataset  = os.getenv("MINIAOD_DATASET")           # e.g. /HZaTo2l2g_miniAOD/pelai-HZa_miniAOD_.../USER
+miniaod_inputDBS = os.getenv("MINIAOD_INPUT_DBS", "phys03")
+
+if not all([era, mass, fraction, pset_path, out_base_dir, miniaod_dataset]):
+    raise RuntimeError(
+        "Missing required environment variables: ERA/MASS/FRACTION/CFG_PATH/OUT_DIR/MINIAOD_DATASET"
+    )
 
 if not os.path.isfile(pset_path):
     raise RuntimeError(f"pset cfg not found: {pset_path}")
@@ -34,14 +41,18 @@ config.JobType.inputFiles = []
 # config.JobType.maxMemoryMB = 2500
 # config.JobType.maxJobRuntimeMin = 2750
 
-# ===== Data（PrivateMC）=====
-config.Data.inputDBS = "global"
-config.Data.splitting = "EventBased"
-config.Data.unitsPerJob = 100
-config.Data.totalUnits  = 10000
+# ===== Data（使用 miniAOD 的輸出 ROOT 檔）=====
+# 從 miniAOD 的 USER dataset 讀檔
+config.Data.inputDataset = miniaod_dataset
+config.Data.inputDBS     = miniaod_inputDBS
+
+# 同 miniAOD：以檔案為單位分割 job
+config.Data.splitting   = "FileBased"
+config.Data.unitsPerJob = 1          # 每個 job 處理 1 個 miniAOD root file，可視情況調整
+config.Data.totalUnits  = -1         # 讓 CRAB 自動根據 dataset 決定
 
 config.Data.outputPrimaryDataset = "HZaTo2l2g_nanoAOD"
-config.Data.publication = False
+config.Data.publication = True
 
 username = os.getenv("USER", "pelai")
 
@@ -51,4 +62,3 @@ config.Data.outLFNDirBase = f"/store/user/{username}/{rel_out_dir.strip('/')}"
 
 # ===== Site =====
 config.Site.storageSite = "T2_CN_Beijing"
-config.Site.whitelist = ["T2_CN_Beijing"]

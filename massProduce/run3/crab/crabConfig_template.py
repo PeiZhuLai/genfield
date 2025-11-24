@@ -48,7 +48,7 @@ config.General.transferLogs = True
 config.General.requestName = f"HZa_NANO_{era}_M{mass}_frac{fraction}"
 
 # ===== JobType 部分 =====
-config.JobType.pluginName = "Analysis"
+config.JobType.pluginName = "PrivateMC"
 config.JobType.psetName   = pset_nano
 config.JobType.allowUndistributedCMSSW = True
 

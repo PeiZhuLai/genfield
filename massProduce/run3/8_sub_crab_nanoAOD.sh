@@ -24,15 +24,19 @@ if [ ! -f "${CRAB_TMPL}" ]; then
     exit 1
 fi
 
+# 確保放 nanoAOD 專用 CRAB cfg 的子目錄存在
+nanoAOD_CFG_DIR="${CRAB_TMPL_DIR}/nanoAOD"
+mkdir -p "${nanoAOD_CFG_DIR}"
+
 # 供 template 使用的共通路徑（對應 3_prepareConfig_*.sh）
 export CFG_BASE_DIR_12414="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/CMSSW_12_4_14_patch3/src"
 export CFG_BASE_DIR_13013="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/CMSSW_13_0_13/src"
 export CFG_BASE_DIR_13023="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/CMSSW_13_0_23/src"
 # 注意：這裡是共同母目錄，實際輸出目錄由各 step 的 cfg/CRAB 決定，例如：
-#   AOD     : ${OUT_BASE_DIR}/HZaTo2l2g/AOD/M${MASS}/${ERA}/...
-#   MiniAOD : ${OUT_BASE_DIR}/HZaTo2l2g/MINIAOD/M${MASS}/${ERA}/...
-#   NanoAOD : ${OUT_BASE_DIR}/HZaTo2l2g/NANOAOD/M${MASS}/${ERA}/...
-export OUT_BASE_DIR="/eos/home-p/pelai/HZa/private_mc/signal/run3"
+#   AOD     : ${OUT_BASE_DIR}/AOD/M${MASS}/${ERA}/...
+#   MiniAOD : ${OUT_BASE_DIR}/MINIAOD/M${MASS}/${ERA}/...
+#   NanoAOD : ${OUT_BASE_DIR}/NANOAOD/M${MASS}/${ERA}/...
+export OUT_BASE_DIR="HZa/private_sig/"
 
 for era in "${eraList[@]}"; do
   # 根據 ERA 設定與 3_prepareConfig_*.sh 對應的 alias / 年份標籤
@@ -75,10 +79,10 @@ for era in "${eraList[@]}"; do
       #   ${CFG_BASE_DIR}/HZaTo2l2g_M${MASS}/fraction${FRACTION}/8_nanoAOD_fragment_${ERA}_${FRACTION}.py
       export STEP="NANOAOD"
       export CFG_PATH="${CFG_BASE_DIR}/HZaTo2l2g_M${MASS}/fraction${FRACTION}/8_nanoAOD_fragment_${ERA}_${FRACTION}.py"
-      export OUT_DIR="${OUT_BASE_DIR}/HZaTo2l2g/NANOAOD/M${MASS}/${ERA}"
+      export OUT_DIR="${OUT_BASE_DIR}/NANOAOD/M${MASS}/${ERA}"
 
       cfgName="crab_HZa_${era}_M${mass}_frac${fraction}_NANOAOD.py"
-      cfgPath="${CRAB_TMPL_DIR}/${cfgName}"
+      cfgPath="${nanoAOD_CFG_DIR}/${cfgName}"
 
       cp "${CRAB_TMPL}" "${cfgPath}"
 

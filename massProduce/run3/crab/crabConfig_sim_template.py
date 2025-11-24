@@ -24,13 +24,15 @@ if not os.path.isfile(pset_path):
 
 # ===== General =====
 config.General.workArea = f"crab_HZa_{era}_{step}"
-config.General.transferOutputs = True
-config.General.transferLogs = True
+config.General.transferOutputs = True      # 產出的 ROOT 檔會被複製到遠端
+config.General.transferLogs = True         # 每個 job 的 log-archive 會被複製到遠端 & 保留在本地 task 目錄
+# 本地：<workArea>/crab_HZa_.../results/*log* 以及各 job 的 tar.gz
+# 遠端：和 output files 同一個 user area 下的 logs 目錄中
 
 config.General.requestName = f"HZa_{step}_{era}_M{mass}_frac{fraction}"
 
 # ===== JobType =====
-config.JobType.pluginName = "Analysis"
+config.JobType.pluginName = "PrivateMC"
 config.JobType.psetName   = pset_path
 config.JobType.allowUndistributedCMSSW = True
 config.JobType.inputFiles = []
@@ -43,8 +45,9 @@ config.Data.splitting = "EventBased"
 config.Data.unitsPerJob = 100
 config.Data.totalUnits  = 10000
 
+# 這個名字會出現在 DAS 的 dataset name 裡，給 DIGI 用作 inputDataset
 config.Data.outputPrimaryDataset = "HZaTo2l2g_sim"
-config.Data.publication = False
+config.Data.publication = True
 
 username = os.getenv("USER", "pelai")
 
@@ -56,4 +59,3 @@ config.Data.outLFNDirBase = f"/store/user/{username}/{rel_out_dir.strip('/')}"
 
 # ===== Site =====
 config.Site.storageSite = "T2_CN_Beijing"
-config.Site.whitelist = ["T2_CN_Beijing"]
