@@ -13,10 +13,9 @@ voms-proxy-info -exists -hours 1 || { echo "Proxy invalid or missing"; exit 1; }
 
 eraList=( "2022preEE" "2022postEE" "2023preBPix" "2023postBPix" )
 massList=( 0p1 0p2 0p3 0p4 0p5 0p6 0p7 0p8 0p9 1 2 3 4 5 6 7 8 9 10 15 20 25 30 )
-fractions=( {1..10} )
 
 CRAB_TMPL_DIR="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/crab"
-CRAB_TMPL="${CRAB_TMPL_DIR}/crabConfig_digi_template.py"
+CRAB_TMPL="${CRAB_TMPL_DIR}/2_crabConfig_digi_template.py"
 
 if [ ! -f "${CRAB_TMPL}" ]; then
     echo "Missing CRAB template: ${CRAB_TMPL}"
@@ -35,29 +34,25 @@ export CFG_BASE_DIR_13023="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/mass
 #   AOD     : ${OUT_BASE_DIR}/AOD/M${MASS}/${ERA}/...
 #   MiniAOD : ${OUT_BASE_DIR}/MINIAOD/M${MASS}/${ERA}/...
 #   NanoAOD : ${OUT_BASE_DIR}/NANOAOD/M${MASS}/${ERA}/...
-export OUT_BASE_DIR="HZa/private_sig/"
+export OUT_BASE_DIR="HZa/private_sig"
 
 for era in "${eraList[@]}"; do
   case "${era}" in
     2022preEE)
-      export ERA_ALIAS="Run3Summer22_2022preEE"
       export YEAR_TAG="2022"
-      export CFG_BASE_DIR="${CFG_BASE_DIR_12414}"
+      export CMSSW="${CFG_BASE_DIR_12414}"
       ;;
     2022postEE)
-      export ERA_ALIAS="Run3Summer22_2022postEE"
       export YEAR_TAG="2022"
-      export CFG_BASE_DIR="${CFG_BASE_DIR_12414}"
+      export CMSSW="${CFG_BASE_DIR_12414}"
       ;;
     2023preBPix)
-      export ERA_ALIAS="Run3Summer23_2023preBPix"
       export YEAR_TAG="2023"
-      export CFG_BASE_DIR="${CFG_BASE_DIR_13023}"
+      export CMSSW="${CFG_BASE_DIR_13023}"
       ;;
     2023postBPix)
-      export ERA_ALIAS="Run3Summer23BPix_2023postBPix"
       export YEAR_TAG="2023"
-      export CFG_BASE_DIR="${CFG_BASE_DIR_13023}"
+      export CMSSW="${CFG_BASE_DIR_13023}"
       ;;
     *)
       echo "Unknown ERA: ${era}"
@@ -66,30 +61,23 @@ for era in "${eraList[@]}"; do
   esac
 
   for mass in "${massList[@]}"; do
-    for fraction in "${fractions[@]}"; do
-      export ERA="${era}"
-      export MASS="${mass}"
-      export FRACTION="${fraction}"
+    export ERA="${era}"
+    export MASS="${mass}"
 
-      # DIGI / DRPremix step
-      export STEP="DIGI"
+    # DIGI / DRPremix step
+    export STEP="digi"
 
-      # 對應 3_prepareConfig_* 產生的 2_digi_fragment_${ERA}_${FRACTION}.py
-      export CFG_PATH="${CFG_BASE_DIR}/HZaTo2l2g_M${MASS}/fraction${FRACTION}/2_digi_fragment_${ERA}_${FRACTION}.py"
+    # DIGI 輸出的邏輯目錄
+    export OUT_DIR="${OUT_BASE_DIR}/DIGI/M${MASS}/${ERA}"
 
-      # DIGI 輸出的邏輯目錄
-      export OUT_DIR="${OUT_BASE_DIR}/DIGI/M${MASS}/${ERA}"
+    cfgName="crab_HZa_${era}_M${mass}_digi.py"
+    cfgPath="${DIGI_CFG_DIR}/${cfgName}"
 
-      cfgName="crab_HZa_${era}_M${mass}_frac${fraction}_DIGI.py"
-      cfgPath="${DIGI_CFG_DIR}/${cfgName}"
+    cp "${CRAB_TMPL}" "${cfgPath}"
 
-      cp "${CRAB_TMPL}" "${cfgPath}"
+    echo "Submitting CRAB DIGI task for ERA=${ERA} (${ERA_ALIAS}), M=${MASS}"
+    crab submit -c "${cfgPath}"
 
-      echo "Submitting CRAB DIGI task for ERA=${ERA} (${ERA_ALIAS}), M=${MASS}, frac=${FRACTION}"
-      echo "  using CFG_PATH=${CFG_PATH}"
-      crab submit -c "${cfgPath}"
-
-      # sleep 1
-    done
+    # sleep 1
   done
 done
