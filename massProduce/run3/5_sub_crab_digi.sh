@@ -11,7 +11,9 @@ set -e
 export X509_USER_PROXY=${X509_USER_PROXY:-/tmp/x509up_u$(id -u)}
 voms-proxy-info -exists -hours 1 || { echo "Proxy invalid or missing"; exit 1; }
 
-eraList=( "2022preEE" "2022postEE" "2023preBPix" "2023postBPix" )
+# eraList=( "2022preEE" "2022postEE" ) # Have to hand in jobs in CMSSW_12_4_14_patch3
+eraList=( "2023preBPix" "2023postBPix" ) # Have to hand in jobs in CMSSW_13_0_23
+
 massList=( 0p1 0p2 0p3 0p4 0p5 0p6 0p7 0p8 0p9 1 2 3 4 5 6 7 8 9 10 15 20 25 30 )
 
 CRAB_TMPL_DIR="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/crab"
@@ -66,6 +68,7 @@ for era in "${eraList[@]}"; do
 
     # DIGI / DRPremix step
     export STEP="digi"
+    export DASFILEBASE="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/DAS_Names/sim"
 
     # DIGI 輸出的邏輯目錄
     export OUT_DIR="${OUT_BASE_DIR}/DIGI/M${MASS}/${ERA}"
@@ -75,7 +78,7 @@ for era in "${eraList[@]}"; do
 
     cp "${CRAB_TMPL}" "${cfgPath}"
 
-    echo "Submitting CRAB DIGI task for ERA=${ERA} (${ERA_ALIAS}), M=${MASS}"
+    echo "Submitting CRAB DIGI task for ERA=${ERA}, M=${MASS}"
     crab submit -c "${cfgPath}"
 
     # sleep 1

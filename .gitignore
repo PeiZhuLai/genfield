@@ -12,8 +12,10 @@
 massProduce/*/CMSSW*/*
 
 massProduce/run3/crab_*
-massProduce/run3/crab/sim/crab_*
-massProduce/run3/crab/digi/crab_*
-massProduce/run3/crab/AOD/crab_*
-massProduce/run3/crab/miniAOD/crab_*
-massProduce/run3/crab/nanoAOD/crab_*
+massProduce/run3/crab/*/crab_*
+# massProduce/run3/crab/sim/crab_*
+# massProduce/run3/crab/digi/crab_*
+# massProduce/run3/crab/AOD/crab_*
+# massProduce/run3/crab/miniAOD/crab_*
+# massProduce/run3/crab/nanoAOD/crab_*
+massProduce/run3/DAS_Names/*/*.txt

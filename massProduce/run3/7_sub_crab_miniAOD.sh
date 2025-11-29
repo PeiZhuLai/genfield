@@ -74,12 +74,14 @@ for era in "${eraList[@]}"; do
 
     export OUT_DIR="${OUT_BASE_DIR}/MINIAOD/M${MASS}/${ERA}"
 
+    export DASFILEBASE="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/DAS_fileLists/AOD"
+
     cfgName="crab_HZa_${era}_M${mass}_miniAOD.py"
     cfgPath="${miniAOD_CFG_DIR}/${cfgName}"
 
     cp "${CRAB_TMPL}" "${cfgPath}"
 
-    echo "Submitting CRAB MINIAOD task for ERA=${ERA} (${ERA_ALIAS}), M=${MASS}"
+    echo "Submitting CRAB MINIAOD task for ERA=${ERA}, M=${MASS}"
     crab submit -c "${cfgPath}"
 
     # 如需放慢提交速度可打開：

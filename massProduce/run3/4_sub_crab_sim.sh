@@ -8,15 +8,20 @@
 
 set -e
 
+# CRAB_RESUBMIT: 1 表示只做 crab resubmit；0 或未設則做 submit
+CRAB_RESUBMIT=0
+CRAB_RESUBMIT="${CRAB_RESUBMIT:-0}"
+
 export X509_USER_PROXY=${X509_USER_PROXY:-/tmp/x509up_u$(id -u)}
 voms-proxy-info -exists -hours 1 || { echo "Proxy invalid or missing"; exit 1; }
 
 # 同一支 script 同時支援四個 era 的 SIM
-# eraList=( "2022preEE" "2022postEE" "2023preBPix" "2023postBPix" )
-# eraList=( "2022preEE" "2022postEE" )
-eraList=( "2023preBPix" "2023postBPix" )
+# eraList=( "2022preEE" "2022postEE" ) # Have to hand in jobs in CMSSW_12_4_14_patch3
+# eraList=( "2023preBPix" "2023postBPix" ) # Have to hand in jobs in CMSSW_13_0_23
+eraList=( "2022postEE" ) # Have to hand in jobs in CMSSW_12_4_14_patch3
 
-massList=( 0p1 0p2 0p3 0p4 0p5 0p6 0p7 0p8 0p9 1 2 3 4 5 6 7 8 9 10 15 20 25 30 )
+# massList=( 0p1 0p2 0p3 0p4 0p5 0p6 0p7 0p8 0p9 1 2 3 4 5 6 7 8 9 10 15 20 25 30 )
+massList=( 7 )
 
 CRAB_TMPL_DIR="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/crab"
 CRAB_TMPL="${CRAB_TMPL_DIR}/1_crabConfig_sim_template.py"
@@ -75,14 +80,16 @@ for era in "${eraList[@]}"; do
     cfgName="crab_HZa_${era}_M${mass}_sim.py"
     cfgPath="${SIM_CFG_DIR}/${cfgName}"
 
-    # 確保每次都是從最新 template 重新產生
-    rm -f "${cfgPath}"
-    cp "${CRAB_TMPL}" "${cfgPath}"
-
-    echo "Submitting CRAB SIM task for ERA=${ERA}, M=${MASS}"
-    crab submit -c "${cfgPath}"
-
-    # 如需放慢提交速度可打開：
-    # sleep 1
+    if [ "${CRAB_RESUBMIT}" = "1" ]; then
+      echo "Resubmitting CRAB SIM task for ERA=${ERA}, M=${MASS}"
+      if ! crab resubmit -d "crab_${ERA}/HZaTo2l2g_sim_M${MASS}/crab_HZa_sim_${ERA}_M${MASS}"; then
+        echo "  -> No failed jobs to resubmit for ERA=${ERA}, M=${MASS}，跳過。"
+      fi
+    else
+      echo "Submitting CRAB SIM task for ERA=${ERA}, M=${MASS}"
+      rm -f "${cfgPath}"
+      cp "${CRAB_TMPL}" "${cfgPath}"
+      crab submit -c "${cfgPath}"
+    fi
   done
 done
