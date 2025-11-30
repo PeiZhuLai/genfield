@@ -18,17 +18,21 @@ config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = f'{cmsswBase}/HZaTo2l2g_M{mass}/3_AOD_fragment_{era}_FRACTIONS.py'
 config.JobType.numCores = 1
 
-
 config.section_('Data')
-config.Data.inputDataset = open(f"{DASFileBase}/digi_files_{era}_M{mass}.txt").read().split()
-# config.Data.userInputFiles = open(f"{DASFileBase}/digi_files_{era}_M{mass}.txt").read().split()
+
+dataset_file = f"{DASFileBase}/DAS_Names_{era}_M{mass}.txt"
+with open(dataset_file) as f:
+    for line in f:
+        ds = line.strip()
+        if ds:          # first non-empty line
+            config.Data.inputDataset = ds
+            break
 
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1 
 
 config.Data.inputDBS = 'phys03'
 config.Data.publication = True
-config.Data.inputDBS = 'phys03'
 config.Data.outputDatasetTag = 'AOD' 
 config.General.transferOutputs = True 
 config.General.transferLogs = True

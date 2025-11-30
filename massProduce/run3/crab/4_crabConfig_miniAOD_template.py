@@ -20,15 +20,20 @@ config.JobType.numCores = 1
 
 
 config.section_('Data')
-# config.Data.inputDataset = '/HZaTo2l2g_AOD/pelai-AOD-546d98d7d3219712f68f085782609601/USER'
-config.Data.userInputFiles = open(f"{DASFileBase}/AOD_files_{era}_M{mass}.txt").read().split()
+
+dataset_file = f"{DASFileBase}/DAS_Names_{era}_M{mass}.txt"
+with open(dataset_file) as f:
+    for line in f:
+        ds = line.strip()
+        if ds:          # first non-empty line
+            config.Data.inputDataset = ds
+            break
 
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1 
 
 config.Data.inputDBS = 'phys03'
 config.Data.publication = True
-config.Data.inputDBS = 'phys03'
 config.Data.outputDatasetTag = 'miniAOD' 
 config.General.transferOutputs = True 
 config.General.transferLogs = True

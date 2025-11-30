@@ -31,7 +31,7 @@ with open(dataset_file) as f:
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1 
 
-config.Data.inputDBS = 'global'
+config.Data.inputDBS = 'phys03'
 config.Data.publication = True
 config.Data.outputDatasetTag = 'digi' 
 config.General.transferOutputs = True 

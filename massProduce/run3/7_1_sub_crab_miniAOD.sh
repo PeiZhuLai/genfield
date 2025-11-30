@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# 使用 CRAB 在 T2_CN_Beijing 大量生產私有 MC 的 NANOAOD。
+# 使用 CRAB 在 T2_CN_Beijing 大量生產私有 MC 的 MINIAOD step。
 # 前置：
-#   1. 已跑過 1_gen_fragment.sh 和 3_prepareConfig.sh，產生各 mass / fraction 的 cfg。
-#   2. 已在 ./crab/crabConfig_nanoAOD_template.py 寫好共用 CRAB config (Python)，讀取 ERA/MASS/FRACTION 等環境變數。
+#   1. 已跑過 3_prepareConfig_*.sh，產生各 mass / fraction 的 4_miniAOD_fragment_* cfg。
+#   2. 已在 ./crab/crabConfig_miniAOD_template.py 寫好共用 CRAB config (Python)，讀取 ERA/MASS/FRACTION 等環境變數。
 #   3. 在 UI 節點上先執行: voms-proxy-init -voms cms -rfc
 
 set -e
@@ -19,17 +19,16 @@ eraList=( "2022preEE" "2022postEE" "2023preBPix" "2023postBPix" )
 massList=( 0p1 0p2 0p3 0p4 0p5 0p6 0p7 0p8 0p9 1 2 3 4 5 6 7 8 9 10 15 20 25 30 )
 
 CRAB_TMPL_DIR="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/crab"
-# 使用 nanoAOD 專用 template
-CRAB_TMPL="${CRAB_TMPL_DIR}/4_crabConfig_nanoAOD_template.py"
+CRAB_TMPL="${CRAB_TMPL_DIR}/4_crabConfig_miniAOD_template.py"
 
 if [ ! -f "${CRAB_TMPL}" ]; then
     echo "Missing CRAB template: ${CRAB_TMPL}"
     exit 1
 fi
 
-# 確保放 nanoAOD 專用 CRAB cfg 的子目錄存在
-nanoAOD_CFG_DIR="${CRAB_TMPL_DIR}/nanoAOD"
-mkdir -p "${nanoAOD_CFG_DIR}"
+# 確保放 miniAOD 專用 CRAB cfg 的子目錄存在
+miniAOD_CFG_DIR="${CRAB_TMPL_DIR}/miniAOD"
+mkdir -p "${miniAOD_CFG_DIR}"
 
 # 供 template 使用的共通路徑（對應 3_prepareConfig_*.sh）
 export CFG_BASE_DIR_12414="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/CMSSW_12_4_14_patch3/src"
@@ -75,13 +74,14 @@ for era in "${eraList[@]}"; do
     export ERA="${era}"
     export MASS="${mass}"
 
-    export STEP="nanoAOD"
-    export OUT_DIR="${OUT_BASE_DIR}/NANOAOD/M${MASS}/${ERA}"
+    export STEP="miniAOD"
 
-    export DASFILEBASE="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/DAS_fileLists/miniAOD"
+    export OUT_DIR="${OUT_BASE_DIR}/MINIAOD/M${MASS}/${ERA}"
 
-    cfgName="crab_HZa_${era}_M${mass}_nanoAOD.py"
-    cfgPath="${nanoAOD_CFG_DIR}/${cfgName}"
+    export DASFILEBASE="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/DAS_fileLists/AOD"
+
+    cfgName="crab_HZa_${era}_M${mass}_miniAOD.py"
+    cfgPath="${miniAOD_CFG_DIR}/${cfgName}"
 
     if [ "${CRAB_RESUBMIT}" = "1" ]; then
       echo "Resubmitting CRAB SIM task for ERA=${ERA}, M=${MASS}"
