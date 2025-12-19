@@ -26,14 +26,21 @@ config.JobType.outputFiles = [f'HZaTo2l2g_M{mass}_{era}_sim_FRACTIONS.root']
 config.JobType.inputFiles = [f'/afs/cern.ch/work/p/pelai/HZa/gridpacks/genproductions_run3/bin/MadGraph5_aMCatNLO/13p6TeV/HZaTo2l2g_M{mass}_el8_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz']
 
 config.section_('Data')
-config.Data.outputPrimaryDataset = 'HZaTo2l2g_sim'
 config.Data.splitting = 'EventBased'
+
+# Massive Produce
+# config.Data.unitsPerJob = 100
+# NJOBS = 10  # This is not a configuration parameter, but an auxiliary variable that we use in the next line.
+
+# Test Procedure
 config.Data.unitsPerJob = 100
 NJOBS = 10  # This is not a configuration parameter, but an auxiliary variable that we use in the next line.
+
 config.Data.totalUnits = config.Data.unitsPerJob * NJOBS
 config.Data.outLFNDirBase = '/store/user/pelai/' 
 config.Data.publication = True
-config.Data.outputDatasetTag = 'sim'
+config.Data.outputPrimaryDataset = f"HZaTo2l2g_M{mass}"
+config.Data.outputDatasetTag = f"sim_{era}"
 
 config.section_('Site')
 config.Site.storageSite = 'T2_CN_Beijing'

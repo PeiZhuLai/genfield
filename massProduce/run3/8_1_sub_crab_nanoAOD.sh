@@ -15,8 +15,15 @@ CRAB_RESUBMIT="${CRAB_RESUBMIT:-0}"
 export X509_USER_PROXY=${X509_USER_PROXY:-/tmp/x509up_u$(id -u)}
 voms-proxy-info -exists -hours 1 || { echo "Proxy invalid or missing"; exit 1; }
 
-eraList=( "2022preEE" "2022postEE" "2023preBPix" "2023postBPix" )
-massList=( 0p1 0p2 0p3 0p4 0p5 0p6 0p7 0p8 0p9 1 2 3 4 5 6 7 8 9 10 15 20 25 30 )
+# Full Run
+# eraList=( "2022preEE" "2022postEE" "2023preBPix" "2023postBPix" ) # Have to hand in jobs in CMSSW_13_0_13
+# Test
+eraList=( "2022preEE" "2022postEE" ) # Have to hand in jobs in CMSSW_13_0_13
+
+# High Mass
+massList=( 1 2 3 4 5 6 7 8 9 10 15 20 25 30 )
+# Low Mass
+# massList=( 0p1 0p2 0p3 0p4 0p5 0p6 0p7 0p8 0p9 )
 
 CRAB_TMPL_DIR="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/crab"
 # 使用 nanoAOD 專用 template
@@ -78,21 +85,23 @@ for era in "${eraList[@]}"; do
     export STEP="nanoAOD"
     export OUT_DIR="${OUT_BASE_DIR}/NANOAOD/M${MASS}/${ERA}"
 
-    export DASFILEBASE="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/DAS_fileLists/miniAOD"
+    export DASFILEBASE="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/DAS_Names/miniAOD"
 
     cfgName="crab_HZa_${era}_M${mass}_nanoAOD.py"
     cfgPath="${nanoAOD_CFG_DIR}/${cfgName}"
 
     if [ "${CRAB_RESUBMIT}" = "1" ]; then
-      echo "Resubmitting CRAB SIM task for ERA=${ERA}, M=${MASS}"
-      if ! crab resubmit -d "crab_${ERA}/HZaTo2l2g_sim_M${MASS}/crab_HZa_sim_${ERA}_M${MASS}"; then
+      echo "Resubmitting CRAB nanoAOD task for ERA=${ERA}, M=${MASS}"
+      if ! crab resubmit -d "crab_${ERA}/HZaTo2l2g_${STEP}_M${MASS}/crab_HZa_${STEP}_${ERA}_M${MASS}"; then
         echo "  -> No failed jobs to resubmit for ERA=${ERA}, M=${MASS}，跳過。"
       fi
     else
-      echo "Submitting CRAB SIM task for ERA=${ERA}, M=${MASS}"
+      echo "Submitting CRAB nanoAOD task for ERA=${ERA}, M=${MASS}"
       rm -f "${cfgPath}"
       cp "${CRAB_TMPL}" "${cfgPath}"
-      crab submit -c "${cfgPath}"
+      if ! crab submit -c "${cfgPath}"; then
+        echo "  -> Previous step not finished/alread submitted for ERA=${ERA}, M=${MASS}，跳過。"
+      fi
     fi
   done
 done

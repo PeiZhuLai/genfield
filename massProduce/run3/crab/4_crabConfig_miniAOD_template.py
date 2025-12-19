@@ -34,7 +34,7 @@ config.Data.unitsPerJob = 1
 
 config.Data.inputDBS = 'phys03'
 config.Data.publication = True
-config.Data.outputDatasetTag = 'miniAOD' 
+config.Data.outputDatasetTag = f"miniAOD_M{mass}_{era}"
 config.General.transferOutputs = True 
 config.General.transferLogs = True
 config.Data.outLFNDirBase = '/store/user/pelai/'

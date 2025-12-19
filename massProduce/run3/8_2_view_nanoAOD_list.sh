@@ -14,7 +14,7 @@ for era in "${eraList[@]}"; do
   for mA in "${massList[@]}"; do
     echo "Processing ERA: ${era}, Mass: ${mA}"
 
-    LOG_FILE="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/crab_${era}/HZaTo2l2g_sim_M${mA}/crab_HZa_sim_${era}_M${mA}/crab.log"
+    LOG_FILE="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/crab_${era}/HZaTo2l2g_nanoAOD_M${mA}/crab_HZa_nanoAOD_${era}_M${mA}/crab.log"
 
     if [ ! -f "${LOG_FILE}" ]; then
       echo "Log file not found: ${LOG_FILE}"
@@ -34,10 +34,10 @@ for era in "${eraList[@]}"; do
     DATASET_PATH=$(echo "${OUTPUT_DATASET_LINE}" | awk -F'[:\t]+' '{print $2}')
     echo "Found dataset: ${DATASET_PATH}"
 
-    mkdir -p ./DAS_Names/sim
+    mkdir -p ./DAS_fileLists/nanoAOD
     # 直接把 DATASET_PATH 寫進檔案（只一行）
-    echo "${DATASET_PATH}" > "./DAS_Names/sim/DAS_Names_${era}_M${mA}.txt"
-    # echo "Dataset path saved to /DAS_Names/sim/DAS_Names_${era}_M${mA}.txt"
+    echo "${DATASET_PATH}" > "./DAS_Names/nanoAOD/DAS_Names_${era}_M${mA}.txt"
+    # echo "Dataset path saved to /DAS_Names/nanoAOD/DAS_Names_${era}_M${mA}.txt"
 
   done
 done

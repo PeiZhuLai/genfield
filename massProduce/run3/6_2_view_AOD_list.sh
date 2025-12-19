@@ -1,9 +1,14 @@
 #!/bin/bash
 
-eraList=( "2022preEE" "2022postEE" "2023preBPix" "2023postBPix" )
-# eraList=( "2022postEE" )
-massList=( 0p1 0p2 0p3 0p4 0p5 0p6 0p7 0p8 0p9 1 2 3 4 5 6 7 8 9 10 15 20 25 30 )
-# massList=( 7 )
+# Full Run
+# eraList=( "2022preEE" "2022postEE" "2023preBPix" "2023postBPix" ) # Have to hand in jobs in CMSSW_13_0_13
+# Test
+eraList=( "2022preEE" "2022postEE" ) # Have to hand in jobs in CMSSW_13_0_13
+
+# High Mass
+massList=( 1 2 3 4 5 6 7 8 9 10 15 20 25 30 )
+# Low Mass
+# massList=( 0p1 0p2 0p3 0p4 0p5 0p6 0p7 0p8 0p9 )
 
 for era in "${eraList[@]}"; do
   for mA in "${massList[@]}"; do
@@ -19,7 +24,9 @@ for era in "${eraList[@]}"; do
     # Extract the output dataset line
     OUTPUT_DATASET_LINE=$(grep "Output dataset:" "${LOG_FILE}")
     if [ -z "${OUTPUT_DATASET_LINE}" ]; then
+      echo "=================================================="
       echo "No output dataset found in log file: ${LOG_FILE}"
+      echo "--------------------------------------------------"
       continue
     fi
 
@@ -28,9 +35,9 @@ for era in "${eraList[@]}"; do
     echo "Found dataset: ${DATASET_PATH}"
 
     mkdir -p ./DAS_fileLists/AOD
-    # Query DAS for files in the dataset
-    dasgoclient -query="file dataset=${DATASET_PATH} instance=prod/phys03" > "./DAS_fileLists/AOD/AOD_files_${era}_M${mA}.txt"
-    echo "File list saved to sim_files_${era}_M${mA}.txt"
+    # 直接把 DATASET_PATH 寫進檔案（只一行）
+    echo "${DATASET_PATH}" > "./DAS_Names/AOD/DAS_Names_${era}_M${mA}.txt"
+    # echo "Dataset path saved to /DAS_Names/AOD/DAS_Names_${era}_M${mA}.txt"
 
   done
 done
