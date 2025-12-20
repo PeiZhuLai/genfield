@@ -34,7 +34,7 @@ for era in "${eraList[@]}"; do
     DATASET_PATH=$(echo "${OUTPUT_DATASET_LINE}" | awk -F'[:\t]+' '{print $2}')
     echo "Found dataset: ${DATASET_PATH}"
 
-    mkdir -p ./DAS_fileLists/miniAOD
+    mkdir -p ./DAS_Names/miniAOD
     # 直接把 DATASET_PATH 寫進檔案（只一行）
     echo "${DATASET_PATH}" > "./DAS_Names/miniAOD/DAS_Names_${era}_M${mA}.txt"
     # echo "Dataset path saved to /DAS_Names/miniAOD/DAS_Names_${era}_M${mA}.txt"

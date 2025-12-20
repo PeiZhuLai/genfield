@@ -9,7 +9,7 @@
 set -e
 
 # CRAB_RESUBMIT: 1 表示只做 crab resubmit；0 或未設則做 submit
-CRAB_RESUBMIT=0
+CRAB_RESUBMIT=1
 CRAB_RESUBMIT="${CRAB_RESUBMIT:-0}"
 
 export X509_USER_PROXY=${X509_USER_PROXY:-/tmp/x509up_u$(id -u)}

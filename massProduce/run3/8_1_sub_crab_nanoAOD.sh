@@ -27,7 +27,7 @@ massList=( 1 2 3 4 5 6 7 8 9 10 15 20 25 30 )
 
 CRAB_TMPL_DIR="/afs/cern.ch/work/p/pelai/HZa/gridpacks/genfield/massProduce/run3/crab"
 # 使用 nanoAOD 專用 template
-CRAB_TMPL="${CRAB_TMPL_DIR}/4_crabConfig_nanoAOD_template.py"
+CRAB_TMPL="${CRAB_TMPL_DIR}/5_crabConfig_nanoAOD_template.py"
 
 if [ ! -f "${CRAB_TMPL}" ]; then
     echo "Missing CRAB template: ${CRAB_TMPL}"
