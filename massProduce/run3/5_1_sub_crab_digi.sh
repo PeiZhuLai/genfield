@@ -9,7 +9,7 @@
 set -e
 
 # CRAB_RESUBMIT: 1 表示只做 crab resubmit；0 或未設則做 submit
-CRAB_RESUBMIT=0
+CRAB_RESUBMIT=1
 CRAB_RESUBMIT="${CRAB_RESUBMIT:-0}"
 
 export X509_USER_PROXY=${X509_USER_PROXY:-/tmp/x509up_u$(id -u)}
@@ -17,11 +17,9 @@ voms-proxy-info -exists -hours 1 || { echo "Proxy invalid or missing"; exit 1; }
 
 #===================================================================================
 # === Configuration block: choose ONE scenario below ===============================
-#
 # Usage rule:
 #   - Only ONE "eraList + massList" block should be active at a time
 #   - Comment out all other blocks
-#
 #===================================================================================
 #-----------------------------------------------------------------------------------
 # [Scenario A] Run-2 / Run-3 (2022) SIM production
@@ -29,8 +27,10 @@ voms-proxy-info -exists -hours 1 || { echo "Proxy invalid or missing"; exit 1; }
 #   - Applicable eras: 2022preEE, 2022postEE
 #   - Mass points: high-mass scan
 #-----------------------------------------------------------------------------------
-eraList=( "2022preEE" "2022postEE" )
-massList=( 1 2 3 4 5 6 7 8 9 10 15 20 25 30 )
+# eraList=( "2022preEE" "2022postEE" )
+# massList=( 1 2 )
+# Doing: 1 2
+# Wait massList=( 3 4 5 6 7 8 9 10 15 20 25 30 )
 
 #-----------------------------------------------------------------------------------
 # [Scenario B] Run-3 (2023) SIM production
@@ -38,8 +38,10 @@ massList=( 1 2 3 4 5 6 7 8 9 10 15 20 25 30 )
 #   - Applicable eras: 2023preBPix, 2023postBPix
 #   - Mass points: high-mass scan
 #-----------------------------------------------------------------------------------
-# eraList=( "2023preBPix" "2023postBPix" )
-# massList=( 1 2 3 4 5 6 7 8 9 10 15 20 25 30 )
+eraList=( "2023preBPix" "2023postBPix" )
+massList=( 1 2 )
+# Doing: 1 2
+# Wait massList=( 3 4 5 6 7 8 9 10 15 20 25 30 )
 
 #-----------------------------------------------------------------------------------
 # [Scenario C] Resubmission (debug / partial rerun)

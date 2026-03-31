@@ -6,7 +6,6 @@
 *.err
 *.log
 *.out
-*.sub
 *.pyc
 
 massProduce/*/CMSSW*/*

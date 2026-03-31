@@ -28,13 +28,13 @@ config.JobType.inputFiles = [f'/afs/cern.ch/work/p/pelai/HZa/gridpacks/genproduc
 config.section_('Data')
 config.Data.splitting = 'EventBased'
 
-# Massive Produce
+# Test Produce
 # config.Data.unitsPerJob = 100
 # NJOBS = 10  # This is not a configuration parameter, but an auxiliary variable that we use in the next line.
 
-# Test Procedure
-config.Data.unitsPerJob = 100
-NJOBS = 10  # This is not a configuration parameter, but an auxiliary variable that we use in the next line.
+# Massive Procedure
+config.Data.unitsPerJob = 1000
+NJOBS = 260  # This is not a configuration parameter, but an auxiliary variable that we use in the next line.
 
 config.Data.totalUnits = config.Data.unitsPerJob * NJOBS
 config.Data.outLFNDirBase = '/store/user/pelai/' 

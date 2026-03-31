@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Full Run
-# eraList=( "2022preEE" "2022postEE" "2023preBPix" "2023postBPix" ) # Have to hand in jobs in CMSSW_13_0_13
+eraList=( "2022preEE" "2022postEE" "2023preBPix" "2023postBPix" ) # Have to hand in jobs in CMSSW_13_0_13
 # Test
-eraList=( "2022preEE" "2022postEE" ) # Have to hand in jobs in CMSSW_13_0_13
+# eraList=( "2022preEE" "2022postEE" ) # Have to hand in jobs in CMSSW_13_0_13
 
 # High Mass
 massList=( 1 2 3 4 5 6 7 8 9 10 15 20 25 30 )

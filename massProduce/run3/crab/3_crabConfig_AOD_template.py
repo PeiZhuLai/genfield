@@ -37,7 +37,7 @@ config.Data.outputDatasetTag = f"AOD_M{mass}_{era}"
 config.General.transferOutputs = True 
 config.General.transferLogs = True
 config.Data.outLFNDirBase = '/store/user/pelai/'
-config.JobType.maxMemoryMB = 3000
+config.JobType.maxMemoryMB = 5000
 
 config.section_('Site')
 config.Site.storageSite = 'T2_CN_Beijing'

@@ -8,7 +8,9 @@
 
 set -e
 
-# CRAB_RESUBMIT: 1 表示只做 crab resubmit；0 或未設則做 submit
+# CRAB_RESUBMIT: 
+# 1 表示只做 Resubmit；
+# 0 或未設則做 Nominal Submit
 CRAB_RESUBMIT=0
 CRAB_RESUBMIT="${CRAB_RESUBMIT:-0}"
 

@@ -1,0 +1,24 @@
+universe = vanilla
+
+MY.WantOS = "el9"
+#MY.WantOS = "el7"
+
++JobFlavour = "nextweek"
+#+MaxRunTime = number of seconds
+
+request_cpus = 8
+request_disk = 50GB
+request_memory = 8GB
+##RequestCpus = 4
+##RequestDisk = 50GB
+
+executable = run_on_condor.sh
+
+#           path_to_mg5               gridpack_name       path_to_card 
+arguments = /afs/cern.ch/user/y/yilinz/work/genVal_eos/Origin_genproductions/genproductions_master/bin/MadGraph5_aMCatNLO wellnu01234j_5f_LO_MLM_4jet ./cards/examples/wellnu01234j_5f_LO_MLM_4jet
+
+output = output/wellnu01234j_5f_LO_MLM_4jet.$(ClusterId).$(ProcId).out
+error = error/wellnu01234j_5f_LO_MLM_4jet.$(ClusterId).$(ProcId).err
+log = log/wellnu01234j_5f_LO_MLM_4jet.$(ClusterId).$(ProcId).log
+
+queue 
